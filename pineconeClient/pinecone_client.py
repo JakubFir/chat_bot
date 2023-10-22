@@ -15,8 +15,7 @@ class PineconeClient:
 
     def initialize_pinecone_search(self, texts, embeddings, index_name):
         LOGGER.info("starting retrieving data from pineconeClient")
-
-        if not self.validate_vectors(texts, index_name):
+        if self.validate_vectors(texts, index_name):
             docsearch = Pinecone.from_texts(
                 [doc.page_content for doc in texts],
                 embedding=embeddings,

@@ -21,7 +21,7 @@ class LangchainClient:
 
     def split_document(self, document):
         LOGGER.info("starting splitting the document")
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=400)
         return text_splitter.split_documents(document)
 
     def initialize_qa_chain(self, llm):
@@ -32,9 +32,10 @@ class LangchainClient:
         LOGGER.info(f"starting searching for similarity in docs for query: {query}")
         docs = docsearch.similarity_search(query)
         prompt_template = PromptTemplate.from_template(
-            f"The only thing you know is the provided contex."
-            f" Using the contex of this video talk, answer this: {query}"
-            f" If you can't find an answer in the context, reply: I'm only allowed to answer questions about the video."
+            f"The only thing you know is the provided contex of video talk."
+            f" Based on the context, answer as truthfully as you can to this: {query}."
+            f"If the question is not related to context answer: I dont know"
         )
-
         print(chain.run(input_documents=docs, question=prompt_template.template))
+
+
